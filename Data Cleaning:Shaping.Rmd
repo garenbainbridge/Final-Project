@@ -47,5 +47,5 @@ long_HEPdata <- HEP_data %>%
     values_to = "HEP_mean_value"
   )
 
-saveRDS(long_HEPdata, "long_HEPdata.rds")
+write.csv(long_HEPdata, "long_HEPdata.csv", row.names = FALSE)
 ```
