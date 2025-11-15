@@ -37,7 +37,7 @@ HEP_data <- read_csv("HEP_window_means.csv")
 glimpse(HEP_data)
 ```
 ```{r data}
-#Transforms the HEP_window_means.csv dataset into long format.
+#Transforms the HEP_window_means.csv dataset into long format needed for mixed-effect models.
 long_HEPdata <- HEP_data %>%
   pivot_longer(
     cols = matches("ms_ch"),
