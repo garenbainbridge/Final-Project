@@ -14,7 +14,7 @@ output:
 ---
 
 # Background {#intro .column}
-Heartbeat-evoked potentials (HEPs) are a type of evoked potential (EP) that serve as a biomarker of interoceptive processing, specifically by reflecting the neural processing of cardiac signals.
+Heartbeat-evoked potentials (HEPs) are a type of evoked potential (EP) that serve as a biomarker of interoceptive processing, specifically by reflecting the neural processing of cardiac signals. With each heartbeat, the brain produces a mirror signal, indicating it has received and processed the heartbeat signal. 
 
 **Aim:**  
 To determine whether changes in treadmill incline condition alter the amplitude of HEP wave-forms.
@@ -25,16 +25,19 @@ Does the high incline condition lead to greater increased mean HEP amplitude in 
 **Hypothesis:**  
 High incline condition (6°) trials will show a higher mean HEP amplitude than the low incline (0°) and the medium incline (3°) conditions.
 
-
 # Methods {#methods .column}
 
-HEP waveforms were segmented relative to ECG R-peaks and averaged within two post-heartbeat windows (50–250 ms, 250–400 ms). Mean amplitudes were extracted from midline EEG electrodes (Ch 3, 4, 12, 13).
+![Two trials of each condition were performed in random orders. EEG and ECG equipment captured brain and heart data from each participant during data collection.](Data_Collection_Diagram.png){width=90%}
 
-![Experimental pipeline showing EEG and ECG collection during treadmill walking.](Data_Collection_Diagram.png){width=90%}
+- EEG timepoints were segmented relative to ECG R-peaks and averaged within two post-heartbeat windows (50–250 ms, 250–400 ms).
+- Mean HEP amplitudes were extracted from midline anterior cingulate cortex (ACC) EEG electrodes (Ch 3, 4, 12, 13).
+- A linear mixed-effects model was fit with fixed effects of 
+  - *Condition* (low incline (0°), medium incline (3°), and high incline (6°))
+  - *Time Window* (50–250 ms, 250–400 ms)
+  - *Condition* x *Time Window* interaction
+  - Channel differences
 
-(HEP_Amplitude_Boxplots.png)
-A linear mixed-effects model was fit with fixed effects of *Condition* (low intensity (0° incline), moderate intensity (3° incline), and high intensity (6° incline)), *Time Window* (50–250 ms, 250–400 ms), and their interaction, controlling for channel differences. Random intercepts and time-window slopes were modeled for each subject:
-
+Random intercepts and time-window slopes were modeled for each subject:
 \[
 HEP \sim Condition \times Time + Channel + (1 + Time | Participant)
 \]
@@ -49,11 +52,16 @@ The mixed-effects model revealed:
 - **Time Window**: not significant (*p* = .286)  
 - **Condition × Time Window Interaction**: *F*(5, 677) = 2.67, *p* = .021 
 
-Post-hoc contrasts showed:
+![Time window effects differ by trial condition. Amplitude differences are largest under low and medium conditions, but minimal under high conditions.](HEP_EMM_plot.png){width=77%}
 
-- Late-window HEP amplitudes were significantly enhanced in the **low and medium incline conditions**
-- The **high incline condition did not show a significant late-window increase**
+![Raw HEP amplitude values observed at the participant levels separated by early and late time windows.](HEP_jitter_plot.png){width=76%}
 
-These results indicate that moderate physical load maximally modulates heartbeat-evoked cortical responses.
+![Boxplots of incline condition and HEP amplitude values.](HEP_Amplitude_Boxplots.png){width=75%}
 
-# Discussion {#discussion .column}
+![Histogram distribution of HEP amplitude values. Resembles a bell-curve, indicating a normal distribution.](HEP_Amplitude_histogram.png){width=67%}
+
+# Citations
+
+Bainbridge, G. B. (2025). HEP Window Means (v1.0) [Data set]. SIPLab. 
+
+
