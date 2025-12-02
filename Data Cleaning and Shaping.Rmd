@@ -1,0 +1,66 @@
+---
+title: "Final Project Analysis"
+author: "Garen Bainbridge"
+date: "2025-11-05"
+output: html_document
+---
+
+```{r packages}
+#Loads the tidyverse package
+library(tidyverse)
+```
+
+```{r data}
+#Loads the raw HEP data set
+raw_HEPdata <- read_csv("HEP_window_means.csv")
+glimpse(raw_HEPdata)
+```
+```{r data-transformation}
+long_HEPdata <- raw_HEPdata %>%
+  #Transforms the HEP_window_means.csv dataset into long format. Mixed-effect models require data sets to be in long format due to analysis of individual observations.
+  pivot_longer(
+    cols = matches("ms_ch"),
+    names_to = c("Time_Window", "Channel"),
+    # Names_pattern splits the window_channel column names into separate columns (50-250ms_ch3 → 50-250ms + ch3)
+    names_pattern = "(.*ms)_(ch.*)",
+    values_to = "HEP_mean_value"
+  )
+long_HEPdata <- long_HEPdata %>% 
+  #Converts the listed variables into factors to ensure they are treated as categorical grouping variables rather than numeric measurements.
+  mutate( 
+    Subject = factor(Participant), 
+    Time_Window = factor(Time_Window), 
+    Channel = factor(Channel) 
+    )
+glimpse(long_HEPdata)
+
+#Saves the transformed HEP data set as an Excel file
+write.csv(long_HEPdata, "long_HEPdata.csv", row.names = FALSE)
+```
+```{r visualization-histogram}
+# Generates a histogram distribution of HEP amplitude values
+  ggplot(long_HEPdata, aes(x = HEP_mean_value,)) +
+    geom_histogram(
+      color = "black",
+      fill = "lightgreen"
+    ) +
+    labs(
+      title = "Distribution of HEP Amplitude Values",
+      x = "HEP Amplitude (µV)",
+      y = "Count"
+    ) +
+  theme_minimal()
+```
+
+``` {r visualization-boxplot}
+#Generates a box plot graph of incline condition and HEP amplitude values
+ggplot(long_HEPdata, aes(x = Condition, y = HEP_mean_value)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(
+    title = "HEP Amplitude by Incline Condition",
+    x = "Incline Condition",
+    y = "HEP Amplitude (µV)"
+  ) +
+  theme_minimal()
+
+```

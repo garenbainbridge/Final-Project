@@ -5,55 +5,85 @@ date: "2025-11-15"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-```{r Data}
+``` {r packages}
+#Loads the required R packages
 library(tidyverse)
 library(lme4)
-library(nlme)
 library(lmerTest)
+library(emmeans)
 ```
-```{r Data}
+
+``` {r data}
+#Loads the processed HEP data set
 long_HEPdata <- read.csv("long_HEPdata.csv")
 glimpse(long_HEPdata)
 ```
-```{r Data}
-#Make categorical predictor variables into factors, so the model treats them correctly.
-long_HEPdata <- long_HEPdata %>%
-  mutate(
-    Subject = factor(Participant),
-    Time_Window = factor(Time_Window),
-    Channel = factor(Channel)
-  )
+
+``` {r model1}
+#Fits the long_HEPdata data set to a LMM with random intercepts only
+model1 <- lmer(
+  HEP_mean_value ~ Condition * Time_Window + Channel +
+    (1 | Participant),
+    data = long_HEPdata
+)
+
+#Outputs the model summary
+summary(model1)
 ```
 
-```{r Data}
-#Generates a basic mixed effects model, giving random intercepts to each participant.
-model1 <- lmer(
-  HEP_mean_value ~ Time_Window + Channel + (1 | Participant),
-  data = long_HEPdata
+``` {r model2}
+#Fits the long_HEPdata data set to a LMM with random intercepts and random slopes
+model2 <- lmer(
+  HEP_mean_value ~ Condition * Time_Window + Channel +
+    (1 + Time_Window | Participant),
+    data = long_HEPdata
 )
-print(model1)
+#Outputs the model summary and type 3 ANOVA
+summary(model2)
+anova(model2)
 ```
+``` {r test-normality}
+#Tests normality of model2 residuals.
+qqnorm(residuals(model2))
+qqline(residuals(model2))
+```
+
+QQ-plot shows residuals are normally distributed as there is no strong S-shape, but rather a constant diagonal line. This satisfies the normality assumption for this LMM. 
+``` {r test-homoscedasticity}
+#Tests model2 for homoscedasticity of variance.
+plot(fitted(model2), residuals(model2))
+abline(h = 0)
+```
+
+Residual plot has a horizontal shape. The lack of curvature and drift suggests fairly uniform variance, so no heterogeneity of variance. This indicates that the residuals are homoscedastic.
+``` {r model-comparisons}
+#Compares model1 and model2, justifying the addition of random slopes in model2
+anova(model1, model2)
+```
+
+Model1 and Model2 were compared to determine which fit the data set best. Due to Model1 having higher AIC and BIC values, it is concluded that it under fits the data set. Model1 does not have enough complexity to fully capture the data. By taking into consideration that each participant has their own window response when comparing early vs. late windows, Model2 fits the data structure best. 
+
+``` {r visualization-EMM-plot}
+
+#Generates an interaction plot to visualize estimated marginal means (EMMs) of the data.
+emmip(
+  model2,
+  Condition ~ Time_Window,
+  CIs = TRUE
+)
+```
+```{r visualization-jitter-plot}
+#Generates a jitter plot to visualize the relationship between participant HEP amplitudes and condition x time window
+ggplot(long_HEPdata,
+       aes(Time_Window, HEP_mean_value, color=Condition))+
+  geom_jitter(width=0.15, alpha=0.4) +
+  theme_minimal(base_size = 16) +
+  labs(
+    title = "Participant Level HEP Amplitudes by Conditions and Time Windows",
+    x = "Time Window",
+    y = "HEP Amplitude (µV)"
+  ) +
+  theme_minimal()
+```
+
+Choice of Test: I chose to run a linear mixed-effects model with the fixed effects of Condition, Time Window, their interaction variable, and Channel. Due to the HEP data being collected repeatedly from the same participants over multiple trial conditions, the independence assumption is violated, so neither an ANOVA or linear regression can be performed. Mixed-effects modeling remains as the best choice as it accounts for individual-level variability and within-subject correlation. Diagnostic tests of assumptions performed on model2, QQ plot and residual plot, indicate the data does not deviate significantly from normality and is homoscedastic, thus further supporting the use of a mixed-effects model to analyze the data.
