@@ -1,0 +1,16 @@
+The processed data file has been transformed into long format and had the Participant, Time Window, and Channel variables mutated into factors.
+# Columns:
+
+Participant: unique identifier for each participant data was collected from; WS001-WS015 (1st to 15th participant)
+Condition: low_trial_1: first trial of low treadmill incline (0°)
+           low_trial_2: second trial of low treadmill incline (0°)
+           med_trial_1: first trial of medium treadmill incline (3°)
+           med_trial_2: second trial of medium treadmill incline (3°)
+           high_trial_1: first trial of high treadmill incline (6°)
+           high_trial_2: second trial of high treadmill incline (6°)
+50-250ms_mean_over_channels: mean data of first time window from electrode channels #3, #4, #12, & #13
+250-400ms_mean_over_channels: mean data of second time window from electrode channels #3, #4, #12, & #13
+Time_Window: first time window (50-250ms) & second time window (250-400ms)
+Channel: electrode channels #3, #4, #12, & #13
+HEP_mean_value: HEP amplitude for each electrode channel
+Subject: unique identifier for each participant data was collected from; WS001-WS015 (1st to 15th participant)
