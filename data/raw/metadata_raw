@@ -1,1 +1,22 @@
-The data in the raw file is from my thesis project outside of class. The datapoints were collected from averaging participant EEG and ECG data to generate HEP amplitude values across two different time windows and three different conditions.
+The data in the raw file is from my thesis project outside of class. 
+The datapoints were collected from averaging participant EEG and ECG data to generate HEP amplitude values across two different time windows and three different conditions.
+
+# Columns:
+
+Participant: unique identifier for each participant data was collected from; WS001-WS015 (1st to 15th participant)
+Condition: low_trial_1: first trial of low treadmill incline (0°)
+           low_trial_2: second trial of low treadmill incline (0°)
+           med_trial_1: first trial of medium treadmill incline (3°)
+           med_trial_2: second trial of medium treadmill incline (3°)
+           high_trial_1: first trial of high treadmill incline (6°)
+           high_trial_2: second trial of high treadmill incline (6°)
+50-250ms_ch3: data of first time window from electrode channel #3
+50-250ms_ch4: data of first time window from electrode channel #4
+50-250ms_ch12: data of first time window from electrode channel #12
+50-250ms_ch13: data of first time window from electrode channel #13
+50-250ms_mean_over_channels: mean data of first time window from electrode channels #3, #4, #12, & #13
+250-400ms_ch3: data of second time window from electrode channel #3
+250-400ms_ch4: data of second time window from electrode channel #4
+250-400ms_ch12: data of second time window from electrode channel #12
+250-400ms_ch13: data of second time window from electrode channel #13
+250-400ms_mean_over_channels: mean data of second time window from electrode channels #3, #4, #12, & #13
