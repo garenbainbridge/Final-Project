@@ -63,6 +63,8 @@ anova(model1, model2)
 
 Model1 and Model2 were compared to determine which fit the data set best. Due to Model1 having higher AIC and BIC values, it is concluded that it under fits the data set. Model1 does not have enough complexity to fully capture the data. By taking into consideration that each participant has their own window response when comparing early vs. late windows, Model2 fits the data structure best. 
 
+No other transformation of the data set is necessary for a complete analysis of the data. After fitting the model, no strong indicators of skew, outliers, or violations of required assumptions were found. As a result, the data set does not require any additional transformations.
+
 ``` {r visualization-EMM-plot}
 
 #Generates an interaction plot to visualize estimated marginal means (EMMs) of the data.
